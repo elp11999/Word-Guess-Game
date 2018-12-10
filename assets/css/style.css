@@ -3,10 +3,22 @@
  */
 body {
     background-color: #4aaaa5;
-    background-color: #000;
     color: #fff;
+    /*
+    background-image: url("../images/nfl.png");
+    background-repeat: repeat;
+    */
+    background-color: #000;
+}
+
+.container {
+    margin-top: 10px;
 }
 
 #displayedword {
     font-size: 20px;
+}
+
+.gallowimage {
+    display: none;
 }

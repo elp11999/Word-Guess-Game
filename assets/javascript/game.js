@@ -369,7 +369,8 @@ $(document).ready(function() {
                     this.currentWordLetterCount++;
             }
 
-            // Update html
+            // Update html            
+            $('.gallowimage').hide();
             this.updateHtml(); 
 
             console.log("init: started for word " + this.currentWord + " in theme " + this.currentTheme.title);
@@ -380,8 +381,8 @@ $(document).ready(function() {
 
             //console.log("user entered " + key);
 
-            // Check for alpha-numeric values only
-            if (!key.match(/^[0-9a-z]+$/))
+            // Check for alpha values only
+            if (!key.match(/^[a-z]+$/))
                 return;
 
             // Check for duplicate key
@@ -392,8 +393,13 @@ $(document).ready(function() {
             this.lettersGuessed.push(key);
 
             // Check if key is contained in the current word
-            if (this.checkGuess(key) === false)
+            if (this.checkGuess(key) === false) {
+                let image = "assets/images/gallow" + this.guessesRemaining + ".jpg";
+                console.log(image);
+                $('.gallowimage').attr('src', image);
+                $('.gallowimage').show();
                 this.guessesRemaining--;
+            }
 
             //console.log(this.lettersGuessed.toString());
             //console.log(this.displayedWord.join(" "));
@@ -407,10 +413,8 @@ $(document).ready(function() {
             } else if (this.guessesRemaining === 0) {
                 this.loser();
                 this.pickNewTheme();
-            }
-
-            // Update html
-            this.updateHtml();
+            } else
+                this.updateHtml();
         },
 
         // Check Guess function
