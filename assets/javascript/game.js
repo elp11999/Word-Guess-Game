@@ -19,7 +19,7 @@ $(document).ready(function() {
                  "fullback",
                  "linebacker",
                  "cornerback",
-                 "widereceiver",
+                 "wide receiver",
                  "end zone",
                  "half time",
                  "penalty",
@@ -119,7 +119,7 @@ $(document).ready(function() {
         title : "National Hockey League",
         image : "assets/images/nhl.jpg",
         words : ["hockey",
-                 "glove safe",
+                 "glove save",
                  "stick",
                  "puck",
                  "goal tender",
@@ -313,6 +313,9 @@ $(document).ready(function() {
         // Number of losses
         losses : 0,
 
+        // Correct guesses
+        correctGuesses : 0,
+
         // Guesses remaining
         guessesRemaining : 0,
 
@@ -324,33 +327,130 @@ $(document).ready(function() {
 
         // Current word
         currentWord : [],
+
+        // Current work letter count
+        currentWordLetterCount : 0,
+
+        // Displayed word
+        displayedWord : [],
         
         // Themes
         themes : [NFLTheme, NBATheme, MLBTheme, NHLTheme, RedskinsTheme, PackersTheme, StarsTheme, YogaTheme],
 
         // Initialization function
         initializeGame: function() {
-            this.currentTheme = RedskinsTheme;  // Just for you Malcom... lol
-            this.currentWord = this.currentTheme.words[Math.floor(Math.random() * this.currentTheme.words.length)];
-            console.log("init: started for word " + this.currentWord + " in theme " + this.currentTheme.title);
+            this.pickNewTheme(RedskinsTheme);   // Just for you Malcom... lol
             this.initialized = true;
         },
 
         // Pick New theme function
-        pickNewTheme: function() {
-            this.currentTheme = this.themes[Math.floor(Math.random() * this.themes.length)];
+        pickNewTheme: function(theme) {
+
+            // Check if a theme was passed
+            if (theme !== undefined)
+                this.currentTheme = theme;
+            else
+                this.currentTheme = this.themes[Math.floor(Math.random() * this.themes.length)];
+
+            // Get a word from the current theme
             this.currentWord = this.currentTheme.words[Math.floor(Math.random() * this.currentTheme.words.length)];
+                        
+            // Initalize properties
+            this.correctGuesses = 0;
+            this.currentWordLetterCount = 0;
+            this.guessesRemaining = 8;
+            this.lettersGuessed = [];
+            this.displayedWord = [];
+
+            // Create array to hold the users attempt solve the game
+            for (let i = 0; i < this.currentWord.length; i++) {
+                this.displayedWord.push("_");
+                if (this.currentWord.charAt(i) !== " ")
+                    this.currentWordLetterCount++;
+            }
+
+            // Update html
+            this.updateHtml(); 
+
             console.log("init: started for word " + this.currentWord + " in theme " + this.currentTheme.title);
-            this.initialized = true;
         },
 
          // Play game function
-        playGame: function() {
-            console.log("key up for " + event.key);
+        playGame: function(key) {
+
+            //console.log("user entered " + key);
+
+            // Check for alpha-numeric values only
+            if (!key.match(/^[0-9a-z]+$/))
+                return;
+
+            // Check for duplicate key
+            if (this.lettersGuessed.indexOf(key) >= 0)
+                return;
+
+            // Add key to letters guessed
+            this.lettersGuessed.push(key);
+
+            // Check if key is contained in the current word
+            if (this.checkGuess(key) === false)
+                this.guessesRemaining--;
+
+            //console.log(this.lettersGuessed.toString());
+            //console.log(this.displayedWord.join(" "));
+            //console.log(this.guessesRemaining);            
+            //console.log(this.currentWordLetterCount + " " +  this.correctGuesses);
+
+            // Check if player won or lost the game
+            if (this.currentWordLetterCount === this.correctGuesses) {
+                this.winner();
+                this.pickNewTheme();
+            } else if (this.guessesRemaining === 0) {
+                this.loser();
+                this.pickNewTheme();
+            }
+
+            // Update html
+            this.updateHtml();
+        },
+
+        // Check Guess function
+        checkGuess: function(key) {
+            let goodGuess = false;
+
+            for (let i = 0; i < this.currentWord.length; i++) {
+                if (this.currentWord.charAt(i) === key) {
+                    this.displayedWord[i] = key;
+                    this.correctGuesses++;
+                    goodGuess = true;
+                }
+            }
+            return goodGuess;
+        },
+
+        // Update html
+        updateHtml: function() {
+            
+            $('#wins').text(this.wins);
+            $('#losses').text(this.losses);
+            $('#displayedword').text(this.displayedWord.join(" "));
+            $('#guessesleft').text(this.guessesRemaining);
+            $('#lettersguessed').text(this.lettersGuessed.toString());
+            $('.header').text("Current theme is " + this.currentTheme.title);
+            
+        },
+    
+        // Winner function
+        winner: function() {
+            console.log("You are a big winner!!!!");
+            this.wins++;
+        },
+    
+        // Loser function
+        loser: function() {
+            console.log("You are a loser!!!!");
+            this.losses++;
         }
     };
-
-    console.log("Word-Guess-Game started...");
 
     // console.log("Wns=" + hangMan.wins);
     // console.log("Losses=" + hangMan.losses);
