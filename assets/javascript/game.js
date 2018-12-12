@@ -163,7 +163,7 @@ $(document).ready(function() {
     var RedskinsTheme = {
         title : "Washington Redskins",
         image : "assets/images/hangman-redskin.jpg",
-        winAudio : "assets/audio/winner.wav",
+        winAudio : "assets/audio/redskins-winner.mp3",
         loseAudio : "assets/audio/loser.wav",
         words : ["redskins",
                  "washington dc",
@@ -352,13 +352,24 @@ $(document).ready(function() {
 
         // Displayed word
         displayedWord : [],
+
+        // Audio element
+        audioElement: null,
         
         // Themes
         themes : [NFLTheme, NBATheme, MLBTheme, NHLTheme, RedskinsTheme, PackersTheme, StarsTheme, YogaTheme],
 
         // Initialization function
         initializeGame: function() {
+
+            // Stop any audio
+            if (this.audioElement !== null)
+                this.audioElement.pause();
+            
+            // Pick a theme
             this.pickNewTheme();
+
+            // Set initalized
             this.initialized = true;
         },
 
@@ -396,7 +407,8 @@ $(document).ready(function() {
             $('.gallowimage').hide();            
             $('.info').text("Current theme: " + this.currentTheme.title);
             $('#displayedword').show(); 
-            $('.start').text("Replay");           
+            $('.start').text("Replay"); 
+
             this.updateHtml(); 
 
             console.log("init: started for word " + this.currentWord + " in theme " + this.currentTheme.title);
@@ -469,9 +481,9 @@ $(document).ready(function() {
             $('.gallowimage').show();
 
             // Play winner audio
-            var audioElement = document.createElement("audio");
-            audioElement.setAttribute("src", this.currentTheme.winAudio);
-            audioElement.play();
+            this.audioElement = document.createElement("audio");
+            this.audioElement.setAttribute("src", this.currentTheme.winAudio);
+            this.audioElement.play();
 
             // Set game over
             this.started = false;
@@ -490,7 +502,7 @@ $(document).ready(function() {
             }
 
             // Play loser audio
-            var audioElement = document.createElement("audio");
+            this.audioElement = document.createElement("audio");
             audioElement.setAttribute("src", this.currentTheme.loseAudio);
             audioElement.play();
 
@@ -505,7 +517,7 @@ $(document).ready(function() {
             hangMan.playGame(event.key);
     });
 
-    $('.start').click(function() {
+    $('.start').click(function(event) {
         hangMan.initializeGame();
     });
 
