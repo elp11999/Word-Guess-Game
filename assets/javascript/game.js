@@ -499,9 +499,6 @@ $(document).ready(function() {
         }
     };
 
-            // Set game over
-            this.started = false;
-
     // Set call back for document keyup
     $(document).keyup(function(event) {
         if (hangMan.started === true)
