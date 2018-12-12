@@ -503,7 +503,7 @@ $(document).ready(function() {
             this.started = false;
 
     // Set call back for document keyup
-    $(document).keyup(function() {
+    $(document).keyup(function(event) {
         if (hangMan.started === true)
             hangMan.playGame(event.key);
     });
