@@ -5,8 +5,10 @@ $(document).ready(function() {
 
     // NFL Theme
     var NFLTheme = {
-        title : "National Football League",
-        image : "assets/images/nfl.jpg",
+        title : "Football",
+        image : "assets/images/hangman-football.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["football",
                  "cleats",
                  "packers",
@@ -42,8 +44,10 @@ $(document).ready(function() {
 
     // NBA Theme
     var NBATheme = {
-        title : "National Baskeball Association",
-        image : "assets/images/nba.jpg",
+        title : "Basketball",
+        image : "assets/images/hangman-basketball.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["backboard",
                  "basket",
                  "basketball",
@@ -79,8 +83,10 @@ $(document).ready(function() {
 
     // MLB Theme
     var MLBTheme = {
-        title : "Major League Baseball",
-        image : "assets/images/nba.jpg",
+        title : "Baseball",
+        image : "assets/images/hangman-baseball.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["baseball",
                  "first base",
                  "second base",
@@ -116,8 +122,10 @@ $(document).ready(function() {
 
     // NHL Theme
     var NHLTheme = {
-        title : "National Hockey League",
-        image : "assets/images/nhl.jpg",
+        title : "Hockey",
+        image : "assets/images/hangman-hockey.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["hockey",
                  "glove save",
                  "stick",
@@ -154,7 +162,9 @@ $(document).ready(function() {
     // Redskins Theme
     var RedskinsTheme = {
         title : "Washington Redskins",
-        image : "assets/images/redskins.jpg",
+        image : "assets/images/hangman-redskin.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["redskins",
                  "washington dc",
                  "sonny jurgensen",
@@ -173,7 +183,7 @@ $(document).ready(function() {
                  "darrell green",
                  "joe gibbs",
                  "george allen",
-                 "doug wlliams",
+                 "doug williams",
                  "wilber marshal",
                  "joe theismann",
                  "hail to the redskins",
@@ -191,7 +201,9 @@ $(document).ready(function() {
     // Packers Theme
     var PackersTheme = {
         title : "Green Bay Packers",
-        image : "assets/images/packers.jpg",
+        image : "assets/images/hangman-packers.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["packers",
                  "green bay",
                  "lambeau field",
@@ -228,7 +240,9 @@ $(document).ready(function() {
     // Stars Theme
     var StarsTheme = {
         title : "Dallas Stars",
-        image : "assets/images/stars.jpg",
+        image : "assets/images/hangman-stars.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["stars",
                  "dallas",
                  "american airlines center",
@@ -265,7 +279,9 @@ $(document).ready(function() {
     // Yoga Theme
     var YogaTheme = {
         title : "Yoga",
-        image : "assets/images/yoga.jpg",
+        image : "assets/images/hangman-yoga.jpg",
+        winAudio : "assets/audio/winner.wav",
+        loseAudio : "assets/audio/loser.wav",
         words : ["sanskrit",
                  "tirumalai krishnamacharya",
                  "warrior",
@@ -304,8 +320,11 @@ $(document).ready(function() {
     //
     var hangMan = {
 
-        // initialized
+        // Game initialized
         initialized: false,
+
+        // Game started
+        started: false,
 
         // Number of wins
         wins : 0,
@@ -339,18 +358,21 @@ $(document).ready(function() {
 
         // Initialization function
         initializeGame: function() {
-            this.pickNewTheme(RedskinsTheme);   // Just for you Malcom... lol
+            this.pickNewTheme();
             this.initialized = true;
         },
 
         // Pick New theme function
-        pickNewTheme: function(theme) {
+        pickNewTheme: function() {
 
-            // Check if a theme was passed
-            if (theme !== undefined)
-                this.currentTheme = theme;
-            else
+            // Set game started
+            this.started = true;
+
+            // Set current theme
+            if (this.initialized === true)
                 this.currentTheme = this.themes[Math.floor(Math.random() * this.themes.length)];
+            else
+                this.currentTheme = RedskinsTheme;  // Just for you Malcom!!!
 
             // Get a word from the current theme
             this.currentWord = this.currentTheme.words[Math.floor(Math.random() * this.currentTheme.words.length)];
@@ -369,8 +391,12 @@ $(document).ready(function() {
                     this.currentWordLetterCount++;
             }
 
-            // Update html            
-            $('.gallowimage').hide();
+            // Update html
+            $('.hangmanimage').attr('src', this.currentTheme.image); 
+            $('.gallowimage').hide();            
+            $('.info').text("Current theme: " + this.currentTheme.title);
+            $('#displayedword').show(); 
+            $('.start').text("Replay");           
             this.updateHtml(); 
 
             console.log("init: started for word " + this.currentWord + " in theme " + this.currentTheme.title);
@@ -394,27 +420,21 @@ $(document).ready(function() {
 
             // Check if key is contained in the current word
             if (this.checkGuess(key) === false) {
-                let image = "assets/images/gallow" + this.guessesRemaining + ".jpg";
-                console.log(image);
+                var image = "assets/images/gallow" + this.guessesRemaining + ".jpg";
                 $('.gallowimage').attr('src', image);
                 $('.gallowimage').show();
                 this.guessesRemaining--;
             }
 
-            //console.log(this.lettersGuessed.toString());
-            //console.log(this.displayedWord.join(" "));
-            //console.log(this.guessesRemaining);            
-            //console.log(this.currentWordLetterCount + " " +  this.correctGuesses);
-
             // Check if player won or lost the game
             if (this.currentWordLetterCount === this.correctGuesses) {
                 this.winner();
-                this.pickNewTheme();
             } else if (this.guessesRemaining === 0) {
                 this.loser();
-                this.pickNewTheme();
-            } else
-                this.updateHtml();
+            }
+
+            // Update html
+            this.updateHtml();
         },
 
         // Check Guess function
@@ -433,44 +453,64 @@ $(document).ready(function() {
 
         // Update html
         updateHtml: function() {
-            
             $('#wins').text(this.wins);
             $('#losses').text(this.losses);
             $('#displayedword').text(this.displayedWord.join(" "));
             $('#guessesleft').text(this.guessesRemaining);
-            $('#lettersguessed').text(this.lettersGuessed.toString());
-            $('.header').text("Current theme is " + this.currentTheme.title);
-            
+            $('#lettersguessed').text(this.lettersGuessed.toString());        
         },
     
         // Winner function
         winner: function() {
-            console.log("You are a big winner!!!!");
             this.wins++;
+
+            // Show winner image
+            $('.gallowimage').attr('src', "assets/images/winner.jpg");
+            $('.gallowimage').show();
+
+            // Play winner audio
+            var audioElement = document.createElement("audio");
+            audioElement.setAttribute("src", this.currentTheme.winAudio);
+            audioElement.play();
+
+            // Set game over
+            this.started = false;
         },
     
         // Loser function
         loser: function() {
-            console.log("You are a loser!!!!");
             this.losses++;
+
+            // Show player the word
+            for (let i = 0; i < this.currentWord.length; i++) {                
+                if (this.currentWord.charAt(i) !== " ")
+                    this.displayedWord[i] = this.currentWord.charAt(i);
+                else
+                    this.displayedWord[i] = "_";
+            }
+
+            // Play loser audio
+            var audioElement = document.createElement("audio");
+            audioElement.setAttribute("src", this.currentTheme.loseAudio);
+            audioElement.play();
+
+            // Set game over
+            this.started = false;
         }
     };
 
-    // console.log("Wns=" + hangMan.wins);
-    // console.log("Losses=" + hangMan.losses);
-    // console.log("LettersGuessed=" + hangMan.lettersGuessed);
-    // console.log("GuessesRemaining=" + hangMan.losses);
-    // console.log("Themes=" + hangMan.themes);
-    // console.log("currentTheme=" + hangMan.currentTheme);
-    // console.log("currentWord=" + hangMan.currentWord);
+            // Set game over
+            this.started = false;
 
-    $("body").keyup(function(event) {
-        if (hangMan.initialized === false)
-            hangMan.initializeGame();
-        else
+    // Set call back for document keyup
+    $(document).keyup(function() {
+        if (hangMan.started === true)
             hangMan.playGame(event.key);
     });
 
-});
+    $('.start').click(function() {
+        hangMan.initializeGame();
+    });
 
+});
 

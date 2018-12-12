@@ -4,21 +4,28 @@
 body {
     background-color: #4aaaa5;
     color: #fff;
-    /*
-    background-image: url("../images/nfl.png");
-    background-repeat: repeat;
-    */
     background-color: #000;
 }
 
-.container {
+.hangmanimage {
     margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 100%;
+
 }
 
 #displayedword {
-    font-size: 20px;
+    display: none;
+    font-size: 25px;
+    margin-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    border: solid 1px #fff;
+    max-width: 100%;
 }
 
 .gallowimage {
     display: none;
+    margin-bottom: 5px;
+    max-width: 100%;
 }
