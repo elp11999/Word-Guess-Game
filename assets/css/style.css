@@ -11,21 +11,17 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
     max-width: 100%;
-
 }
 
 #displayedword {
     display: none;
-    font-size: 25px;
-    margin-top: 10px;
+    font-size: 20px;
     padding-left: 10px;
-    padding-bottom: 5px;
-    border: solid 1px #fff;
     max-width: 100%;
 }
 
 .gallowimage {
     display: none;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     max-width: 100%;
 }
