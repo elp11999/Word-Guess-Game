@@ -202,7 +202,7 @@ $(document).ready(function() {
     var PackersTheme = {
         title : "Green Bay Packers",
         image : "assets/images/hangman-packers.jpg",
-        winAudio : "assets/audio/winner.wav",
+        winAudio : "assets/audio/packers-winner.mp3",
         loseAudio : "assets/audio/loser.wav",
         words : ["packers",
                  "green bay",
@@ -217,7 +217,7 @@ $(document).ready(function() {
                  "boyd dowler",
                  "carrol dale",
                  "brett favre",
-                 "aaron rodgers ",
+                 "aaron rodgers",
                  "mike mccarthy",
                  "cheesehead",
                  "reggie white",
@@ -365,6 +365,7 @@ $(document).ready(function() {
             // Stop any audio
             if (this.audioElement !== null)
                 this.audioElement.pause();
+            this.audioElement = null;
             
             // Pick a theme
             this.pickNewTheme();
@@ -407,7 +408,6 @@ $(document).ready(function() {
             $('.gallowimage').hide();            
             $('.info').text("Current theme: " + this.currentTheme.title);
             $('#displayedword').show(); 
-            $('.start').text("Replay"); 
 
             this.updateHtml(); 
 
@@ -416,8 +416,6 @@ $(document).ready(function() {
 
          // Play game function
         playGame: function(key) {
-
-            //console.log("user entered " + key);
 
             // Check for alpha values only
             if (!key.match(/^[a-z]+$/))
@@ -474,6 +472,8 @@ $(document).ready(function() {
     
         // Winner function
         winner: function() {
+
+            // Increment wins
             this.wins++;
 
             // Show winner image
@@ -491,9 +491,11 @@ $(document).ready(function() {
     
         // Loser function
         loser: function() {
+
+            // Increment losses
             this.losses++;
 
-            // Show player the word
+            // Show player the complete word
             for (let i = 0; i < this.currentWord.length; i++) {                
                 if (this.currentWord.charAt(i) !== " ")
                     this.displayedWord[i] = this.currentWord.charAt(i);
@@ -503,8 +505,8 @@ $(document).ready(function() {
 
             // Play loser audio
             this.audioElement = document.createElement("audio");
-            audioElement.setAttribute("src", this.currentTheme.loseAudio);
-            audioElement.play();
+            this.audioElement.setAttribute("src", this.currentTheme.loseAudio);
+            this.audioElement.play();
 
             // Set game over
             this.started = false;
@@ -517,6 +519,7 @@ $(document).ready(function() {
             hangMan.playGame(event.key);
     });
 
+    // Set call back for the play button click
     $('.start').click(function(event) {
         hangMan.initializeGame();
     });
