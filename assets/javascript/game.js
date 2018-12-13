@@ -465,7 +465,7 @@ $(document).ready(function() {
         updateHtml: function() {
             $('#wins').text(this.wins);
             $('#losses').text(this.losses);
-            $('#displayedword').text(this.displayedWord.join(" "));
+            $('#displayedword').val(this.displayedWord.join(" "));
             $('#guessesleft').text(this.guessesRemaining);
             $('#lettersguessed').text(this.lettersGuessed.toString());        
         },
