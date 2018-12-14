@@ -524,5 +524,10 @@ $(document).ready(function() {
         hangMan.initializeGame();
     });
 
+    $('#displayedword').focus(function(event) {
+        console.log("changing focus....");
+        $('.start').focus();
+    });
+
 });
 
