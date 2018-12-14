@@ -353,6 +353,9 @@ $(document).ready(function() {
         // Displayed word
         displayedWord : [],
 
+        // Displayed word reset
+        displayedWordReset : [],
+
         // Audio element
         audioElement: null,
         
@@ -399,6 +402,7 @@ $(document).ready(function() {
             // Create array to hold the users attempt solve the game
             for (let i = 0; i < this.currentWord.length; i++) {
                 this.displayedWord.push("_");
+                this.displayedWordReset.push("_");
                 if (this.currentWord.charAt(i) !== " ")
                     this.currentWordLetterCount++;
             }
@@ -418,12 +422,18 @@ $(document).ready(function() {
         playGame: function(key) {
 
             // Check for alpha values only
-            if (!key.match(/^[a-z]+$/))
+            if (!key.match(/^[a-z]+$/)) {
+                $('#displayedword').val("");
+                $('#displayedword').val(this.displayedWord.join(" "));
                 return;
+            }
 
             // Check for duplicate key
-            if (this.lettersGuessed.indexOf(key) >= 0)
+            if (this.lettersGuessed.indexOf(key) >= 0) {
+                $('#displayedword').val("");
+                $('#displayedword').val(this.displayedWord.join(" "));
                 return;
+            }
 
             // Add key to letters guessed
             this.lettersGuessed.push(key);
@@ -522,11 +532,6 @@ $(document).ready(function() {
     // Set call back for the play button click
     $('.start').click(function(event) {
         hangMan.initializeGame();
-    });
-
-    $('#displayedword').focus(function(event) {
-        console.log("changing focus....");
-        $('.start').focus();
     });
 
 });
