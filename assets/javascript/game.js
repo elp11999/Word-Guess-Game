@@ -411,7 +411,7 @@ $(document).ready(function() {
             $('.hangmanimage').attr('src', this.currentTheme.image); 
             $('.gallowimage').hide();            
             $('.info').text("Current theme: " + this.currentTheme.title);
-            $('#displayedword').show(); 
+            $('#displayedword').show();
 
             this.updateHtml(); 
 
