@@ -10,18 +10,20 @@ body {
 .hangmanimage {
     margin-top: 10px;
     margin-bottom: 10px;
-    max-width: 100%;
+    width: 100%;
+    max-width: none;
 }
 
 #displayedword {
     display: none;
     font-size: 20px;
     padding-left: 10px;
-    max-width: 100%;
+    width: 100%;
+    max-width: none;
 }
 
 .gallowimage {
     display: none;
     margin-bottom: 10px;
-    max-width: 100%;
+    max-width: none;
 }
