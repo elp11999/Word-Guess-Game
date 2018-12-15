@@ -524,13 +524,7 @@ $(document).ready(function() {
     };
 
     // Set call back for document keyup
-    //$(document).keyup(function(event) {
-    //    if (hangMan.started === true)
-    //        hangMan.playGame(event.key);
-    //});
-    
-    $(document).bind('keypress', function(event) {
-        console.log("bind key=" + event.key);
+    $(document).keyup(function(event) {
         if (hangMan.started === true)
             hangMan.playGame(event.key);
     });
