@@ -523,11 +523,17 @@ $(document).ready(function() {
         }
     };
 
-    // Set call back for document keyup
-    $(document).keyup(function(event) {
+    $(document).on('keyup touchend', function(event) {
+        console.log("key up for key=" + event.key); 
         if (hangMan.started === true)
             hangMan.playGame(event.key);
     });
+
+    // Set call back for document keyup
+    //$(document).keyup(function(event) {
+    //    if (hangMan.started === true)
+    //        hangMan.playGame(event.key);
+    //});
 
     // Set call back for the play button click
     $('.start').click(function(event) {
